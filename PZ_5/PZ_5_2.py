@@ -12,13 +12,22 @@ K = input('Введите целое число K: ')
 D1 = input('Введите целое число D1,  диапазоне 1-9: ')
 D2 = input('Введите целое число D2, в диапазоне 1-9: ')
 
-while True:  # Обработчик исключений
-    try:
-        K, D1, D2 = int(K), int(D1), int(D2)
-        break
-    except ValueError:
-        K, D1, D2 = input("Введите число K без лишних символов: "), input(
-            "Введите число D1 без лишних символов: "), input("Введите число D2 без лишних символов: ")
+while type(K) != int or type(D1) != int or type(D2) != int:  # Обработчик исключений
+    if type(K) != int:
+        try:
+            K = int(K)
+        except:
+            K = input("Введите число K в целом виде без лишних символов: ")
+    if type(D1) != int:
+        try:
+            D1 = int(D1)
+        except:
+            D1 = input("Введите число D1 в целом виде от 1 до 9 без лишних символов: ")
+    if type(D2) != int:
+        try:
+            D2 = int(D2)
+        except:
+            D2 = input("Введите число D2 в целом виде от 1 до 9 без лишних символов: ")
 
 K = AddLeftDigit(D1, K)
 print(K)  # Вывод первого присваивания
