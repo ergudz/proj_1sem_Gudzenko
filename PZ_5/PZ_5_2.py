@@ -3,7 +3,7 @@
 # K - параметр целого типа, являющийся одновременно входным и выходным).
 # С помощью этой функции последовательно добавить к данному числу K слева данные цифры D1 и D2,
 # выводя результат каждого добавления.
-def AddLeftDigit(D: int, K: int):
+def AddLeftDigit(D: int, K: int):  # Объявление функции
     K = int(str(D) + str(K))
     return K
 
@@ -12,7 +12,7 @@ K = input('Введите целое число K: ')
 D1 = input('Введите целое число D1,  диапазоне 1-9: ')
 D2 = input('Введите целое число D2, в диапазоне 1-9: ')
 
-while True:
+while True:  # Обработчик исключений
     try:
         K, D1, D2 = int(K), int(D1), int(D2)
         break
@@ -22,5 +22,5 @@ while True:
         continue
 
 K = AddLeftDigit(D1, K)
-print(K)
-print(AddLeftDigit(D2, K))
+print(K)  # Вывод первого присваивания
+print(AddLeftDigit(D2, K))  # Вывод второго присваивания
