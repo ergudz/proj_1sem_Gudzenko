@@ -12,5 +12,5 @@ def mean(lst):  # функция, вычисляющая среднее знач
     return sum(lst) / len(lst)
 
 
-for i in d:  # цикл, проходящий по ключам словаря
+for i in d.keys():  # цикл, проходящий по ключам словаря
     print(i, mean(d[i]))
