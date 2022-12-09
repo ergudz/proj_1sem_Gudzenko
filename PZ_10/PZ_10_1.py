@@ -4,17 +4,23 @@
 # 2. в каких магазинах можно приобрести одновременно молоко и сахар.
 # 3. в каких магазинах можно приобрести соль.
 
-d = {'Магнит': {'молоко', 'соль', 'сахар'},
-     'Пятерочка': {'мясо', 'молоко', 'сыр'}}  # Объявление словаря
+shops = {
+    'Магнит': ['молоко', 'соль', 'сахар', ],
+    'Пятерочка': ['мясо', 'молоко', 'сыр', ],
+    'Перекресток': ['молоко', 'творог', 'сыр', 'сахар', ],
+}
+shops_havent_cheese = []
+shops_with_milk_cheese = []
+shops_with_solt = []
 
-set1, set2, set3 = set(), set(), set()  # Создание пустых множеств
+for x in shops.keys():
+    if 'сыр' not in shops[x]:
+        shops_havent_cheese.append(x)
+    if 'молоко' in shops[x] and 'сахар' in shops[x]:
+        shops_with_milk_cheese.append(x)
+    if 'соль' in shops[x]:
+        shops_with_solt.append(x)
 
-for key in d:  # Цикл, перебирающий ключи словаря
-    if 'сыр' not in d[key]:
-        set1 |= {key}  # Добавление ключа в множество
-    if 'молоко' in d[key] and 'сахар' in d[key]:
-        set2 |= {key}
-    if 'соль' in d[key]:
-        set3 |= {key}
-
-print(f'1. {set1}\n2. {set2}\n3. {set3}')  # Вывод результата
+print(f'Магазины в которых нельзя приобрести сыр: {(", ".join(shops_havent_cheese))}')
+print(f'Магазины в которых можно приобрести одновременно молоко и сахар: {(", ".join(shops_with_milk_cheese))}')
+print(f'Магазины в которых можно приобрести соль: {(", ".join(shops_with_solt))}')
