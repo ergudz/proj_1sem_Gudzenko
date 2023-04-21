@@ -31,7 +31,7 @@ with sq.connect('tourist.db') as con:
     FOREIGN KEY (id_tour) REFERENCES tours(id) ON DELETE CASCADE ON UPDATE CASCADE
     );""")
 
-    if cur.execute("""SELECT * FROM tourists""").fetchall() == []:
+    if not cur.execute("""SELECT * FROM tourists""").fetchall():
         cur.execute("""INSERT INTO tourists (name, last_name, sex, date_of_birth, mobile_number, email, country) VALUES 
     ('Иван', 'Иванов', 'М', '1990-01-01', '+79123456789', 'ivanov@gmail.com', 'Россия'),
     ('Javier', 'Garcia', 'М', '1989-12-30', '+34612345678', 'garcia@gmail.com', 'Spain'),
@@ -46,7 +46,7 @@ with sq.connect('tourist.db') as con:
     else:
         pass
 
-    if cur.execute("""SELECT * FROM tours""").fetchall() == []:
+    if not cur.execute("""SELECT * FROM tours""").fetchall():
         cur.execute("""INSERT INTO tours (lable, country, city, start_date, end_date, price) VALUES 
     ('Испания-путешествие по городам', 'Испания', 'Мадрид', '2021-12-01', '2021-12-12', 10000),
     ('Рио-де-Жанейро-Карнавал', 'Бразилия', 'Рио-де-Жанейро', '2022-02-01', '2022-02-10', 1000),
@@ -61,7 +61,7 @@ with sq.connect('tourist.db') as con:
     else:
         pass
 
-    if cur.execute("""SELECT * FROM reservations""").fetchall() == []:
+    if not cur.execute("""SELECT * FROM reservations""").fetchall():
         cur.execute("""INSERT INTO reservations (id_tourist, id_tour, booking_date, tourist_count) VALUES 
     (9, 8, '2022-10-10', 2),
     (3, 1, '2020-12-11', 3),
@@ -80,30 +80,35 @@ with sq.connect('tourist.db') as con:
 
 with sq.connect('tourist.db') as con:
     cur = con.cursor()
-    #1 Вывести список всех туристов
+    # 1 Вывести список всех туристов
     print(cur.execute(f"""SELECT * FROM tourists""").fetchall())
-    #2 Вывести список всех туров, отсортированных по цене в порядке убывания
+    # 2 Вывести список всех туров, отсортированных по цене в порядке убывания
     print(cur.execute(f"""SELECT * FROM tours ORDER BY price DESC""").fetchall())
-    #3 Вывести список всех бронирований, сделанных в заданном городе
-    print(cur.execute(f"""SELECT * FROM reservations WHERE id_tour in (SELECT id FROM tours WHERE city='Конкио')""").fetchall())
-    #4 Вывести список всех туристов, сделавших бронирование в определенный период времени
-    print(cur.execute(f"""SELECT * FROM tourists WHERE id in (SELECT id_tourist FROM reservations WHERE booking_date BETWEEN '2022-10-10' AND '2022-11-18')""").fetchall())
-    #5 Вывести список всех туров с указанием названия страны и города
+    # 3 Вывести список всех бронирований, сделанных в заданном городе
+    print(cur.execute(
+        f"""SELECT * FROM reservations WHERE id_tour in (SELECT id FROM tours WHERE city='Конкио')""").fetchall())
+    # 4 Вывести список всех туристов, сделавших бронирование в определенный период времени
+    print(cur.execute(
+        f"""SELECT * FROM tourists WHERE id in (SELECT id_tourist FROM reservations WHERE booking_date BETWEEN '2022-10-10' AND '2022-11-18')""").fetchall())
+    # 5 Вывести список всех туров с указанием названия страны и города
     print(cur.execute(f"""SELECT lable,country, city FROM tours""").fetchall())
-    #6 Вывести список всех туристов, женщин, у которых дата рождения позже 01.01.1990
+    # 6 Вывести список всех туристов, женщин, у которых дата рождения позже 01.01.1990
     print(cur.execute(f"""SELECT * FROM tourists WHERE sex='Ж' AND date_of_birth>'1990-01-01'""").fetchall())
-    #7 Вывести список всех туров, цена которых больше 5000
+    # 7 Вывести список всех туров, цена которых больше 5000
     print(cur.execute(f"""SELECT * FROM tours WHERE price>5000""").fetchall())
-    #8 Вывести список всех туристов, которые сделали бронирование на конкретный тур
-    print(cur.execute(f"""SELECT * FROM tourists WHERE id IN (SELECT id_tourist FROM reservations WHERE id_tour IN (SELECT id FROM tours WHERE lable='Лазурный бангок'))""").fetchall())
-    #9  Вывести список всех туристов, которые сделали бронирование на тур в указанную дату
-    print(cur.execute(f"""SELECT * FROM tourists WHERE id IN (SElECT id_tourist FROM reservations WHERE booking_date='2022-10-10')""").fetchall())
-    #10 Вывести список всех туристов, у которых номер телефона начинается на "+7"
+    # 8 Вывести список всех туристов, которые сделали бронирование на конкретный тур
+    print(cur.execute(
+        f"""SELECT * FROM tourists WHERE id IN (SELECT id_tourist FROM reservations WHERE id_tour IN (SELECT id FROM tours WHERE lable='Лазурный бангок'))""").fetchall())
+    # 9  Вывести список всех туристов, которые сделали бронирование на тур в указанную дату
+    print(cur.execute(
+        f"""SELECT * FROM tourists WHERE id IN (SElECT id_tourist FROM reservations WHERE booking_date='2022-10-10')""").fetchall())
+    # 10 Вывести список всех туристов, у которых номер телефона начинается на "+7"
     print(cur.execute(f"""SELECT * FROM tourists WHERE mobile_number LIKE '+7%'""").fetchall())
 
 # SQL-запросы на обновление данных в БД:
-with sq.connect('tourist.db') as con:
-    cur = con.cursor()
+
+# with sq.connect('tourist.db') as con:
+#     cur = con.cursor()
     # #1 Изменить дату начала тура с id=1 на '2023-05-01'
     # cur.execute(f"""UPDATE tours SET start_date='2023-05-01' WHERE id=1""")
     # #2 Обновить цену тура с id=7 на 1500
@@ -139,11 +144,10 @@ with sq.connect('tourist.db') as con:
     # #17 Обновление названия тура на "Полный отдых на море" для всех бронирований с id_тура равным 3
     # cur.execute(f"""UPDATE tours SET lable='Полный отдых на море' WHERE id=3""")
 
-
 # SQL-запросы на удаление данных из БД:
 
-with sq.connect('tourist.db') as con:
-    cur = con.cursor()
+# with sq.connect('tourist.db') as con:
+#     cur = con.cursor()
     # #1 Удалить все бронирования, связанные с туристом с id=1
     # cur.execute(f"""DELETE FROM reservations WHERE id_tourist = 1""")
     # #2 Удалить все бронирования, связанные с туром с id=2
@@ -164,4 +168,4 @@ with sq.connect('tourist.db') as con:
     # cur.execute(f"""DELETE FROM reservations WHERE id_tour IN (SELECT id FROM tours WHERE end_date < '2022-02-10')""")
     # #10  Удалить все бронирования, сделанные на тур с определенной ценой
     # cur.execute(f"""DELETE FROM reservations WHERE id_tour IN (SELECT id FROM tours WHERE price = '5000')""")
-#%%
+# %%
